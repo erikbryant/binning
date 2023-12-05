@@ -27,7 +27,7 @@ func usage() {
 func coordsToBounds(minX, minY int, width, height int) image.Rectangle {
 	return image.Rectangle{
 		Min: image.Point{Y: minY, X: minX},
-		Max: image.Point{Y: minY + height - 1, X: minX + width - 1},
+		Max: image.Point{Y: minY + height, X: minX + width},
 	}
 }
 
@@ -41,7 +41,7 @@ func main() {
 
 	bounds := coordsToBounds(*x, *y, *width, *height)
 
-	slice, err := slicePNG(*filename, bounds, *debug)
+	slice, err := sliceImage(*filename, bounds, *debug)
 	if err != nil {
 		log.Fatal(err)
 	}
