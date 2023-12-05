@@ -75,10 +75,10 @@ func slicePNG(filename string, bounds image.Rectangle) ([]byte, error) {
 		return nil, err
 	}
 
-	err = writePNG("out_"+filename, img, bounds)
-	if err != nil {
-		return nil, err
-	}
+	// err = writePNG("out_"+filename, img, bounds)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	return imageToSlice(img, bounds), nil
 }

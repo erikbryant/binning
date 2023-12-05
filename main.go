@@ -10,8 +10,8 @@ import (
 
 var (
 	filename = flag.String("filename", "", "Filename to bin")
-	x        = flag.Int("x", 270, "Upper left corner")
-	y        = flag.Int("y", 174, "Upper left corner")
+	x        = flag.Int("x", 277, "Upper left corner")
+	y        = flag.Int("y", 100, "Upper left corner")
 	width    = flag.Int("width", 1000, "Width")
 	height   = flag.Int("height", 60, "Height")
 )
