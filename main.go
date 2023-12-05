@@ -15,6 +15,7 @@ var (
 	width    = flag.Int("width", 1000, "Width")
 	height   = flag.Int("height", 60, "Height")
 	debug    = flag.Bool("debug", false, "Enable debug output of image section")
+	echo     = flag.Bool("echo", false, "Echo filename to output")
 )
 
 func usage() {
@@ -48,5 +49,9 @@ func main() {
 
 	crc := crc32.ChecksumIEEE(slice)
 
-	fmt.Println(crc)
+	fmt.Print(crc)
+	if *echo {
+		fmt.Print(" ", *filename)
+	}
+	fmt.Println()
 }
