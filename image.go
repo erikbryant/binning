@@ -26,17 +26,12 @@ func writeImage(filename string, img *image.Gray) error {
 	}
 	defer f.Close()
 
-	if err := png.Encode(f, img); err != nil {
-		return err
-	}
-
-	return nil
+	return png.Encode(f, img)
 }
 
 // imageToSlice returns the selected pixels of the image in a slice
 func imageToSlice(img *image.Gray) []uint8 {
 	s := []uint8{}
-
 	bounds := img.Bounds()
 
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
