@@ -31,7 +31,6 @@ func coordsToBounds(minX, minY int, width, height int) image.Rectangle {
 }
 
 func main() {
-	fmt.Println("Welcome to binning!")
 	flag.Parse()
 
 	if *filename == "" {
