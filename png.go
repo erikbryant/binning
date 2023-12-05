@@ -61,7 +61,7 @@ func imageToSlice(img *image.Gray, bounds image.Rectangle) []uint8 {
 
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-			c := img.GrayAt(y, x)
+			c := img.GrayAt(x, y)
 			s = append(s, c.Y)
 		}
 	}
