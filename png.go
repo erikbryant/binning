@@ -2,57 +2,30 @@ package main
 
 import (
 	"image"
+	"image/color"
 	"image/draw"
 	"image/png"
 	"os"
 )
 
-// readPNG reads a PNG file and returns it as a grayscale image
-func readPNG(filename string) (*image.Gray, error) {
-	// Open the PNG file
+// readImage reads an image file and returns it as a grayscale image
+func readImage(filename string) (*image.Gray, error) {
 	f, err := os.Open(filename)
 	if err != nil {
 		return nil, err
 	}
 	defer f.Close()
 
-	// Decode the RGB PNG file into an image
 	img, _, err := image.Decode(f)
 	if err != nil {
 		return nil, err
 	}
 
-	// Convert the RGB image to grayscale
+	// Convert the image to grayscale
 	grayscale := image.NewGray(img.Bounds())
 	draw.Draw(grayscale, grayscale.Bounds(), img, image.Point{}, draw.Src)
 
 	return grayscale, nil
-}
-
-func writePNG(filename string, src *image.Gray, bounds image.Rectangle) error {
-	// Create a blank image to receive the pixels
-	img := image.NewGray(image.Rect(0, 0, bounds.Dx(), bounds.Dy()))
-
-	// Copy pixels from the source region
-	for y := 0; y < bounds.Dy(); y++ {
-		for x := 0; x < bounds.Dx(); x++ {
-			srcX := x + bounds.Min.X
-			srcY := y + bounds.Min.Y
-			img.Set(x, y, src.At(srcX, srcY))
-		}
-	}
-
-	// Write new image to a file
-	f, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	if err := png.Encode(f, img); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // imageToSlice returns the selected pixels of the image in a slice
@@ -69,16 +42,47 @@ func imageToSlice(img *image.Gray, bounds image.Rectangle) []uint8 {
 	return s
 }
 
-func slicePNG(filename string, bounds image.Rectangle) ([]byte, error) {
-	img, err := readPNG(filename)
+func writeSlice(filename string, src []byte, bounds image.Rectangle) error {
+	// Create a blank image to receive the pixels
+	img := image.NewGray(image.Rect(0, 0, bounds.Dx(), bounds.Dy()))
+
+	// Copy pixels from the source region
+	for y := 0; y < bounds.Dy(); y++ {
+		for x := 0; x < bounds.Dx(); x++ {
+			i := y*bounds.Dx() + x
+			img.Set(x, y, color.Gray{
+				Y: src[i],
+			})
+		}
+	}
+
+	// Write new image to a file
+	f, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	if err := png.Encode(f, img); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func slicePNG(filename string, bounds image.Rectangle, writeImg bool) ([]byte, error) {
+	img, err := readImage(filename)
 	if err != nil {
 		return nil, err
 	}
 
-	// err = writePNG("out_"+filename, img, bounds)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	slice := imageToSlice(img, bounds)
 
-	return imageToSlice(img, bounds), nil
+	if writeImg {
+		err = writeSlice("out_"+filename, slice, bounds)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return slice, nil
 }

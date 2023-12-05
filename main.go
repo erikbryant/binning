@@ -14,6 +14,7 @@ var (
 	y        = flag.Int("y", 100, "Upper left corner")
 	width    = flag.Int("width", 1000, "Width")
 	height   = flag.Int("height", 60, "Height")
+	debug    = flag.Bool("debug", false, "Enable debug output of image section")
 )
 
 func usage() {
@@ -40,7 +41,7 @@ func main() {
 
 	bounds := coordsToBounds(*x, *y, *width, *height)
 
-	slice, err := slicePNG(*filename, bounds)
+	slice, err := slicePNG(*filename, bounds, *debug)
 	if err != nil {
 		log.Fatal(err)
 	}
