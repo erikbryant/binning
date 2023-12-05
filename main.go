@@ -48,5 +48,5 @@ func main() {
 
 	crc := crc32.ChecksumIEEE(slice)
 
-	fmt.Println(crc, *filename)
+	fmt.Println(crc)
 }
